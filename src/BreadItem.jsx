@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-function BreadItem({ bread }) {
+function BreadItem({ bread, isLock }) {
   const [count, setCount] = useState(0);
 
   const onChange = (e) => setCount(Number(e.target.value));
@@ -14,7 +14,11 @@ function BreadItem({ bread }) {
       <Info>
         <MFD></MFD>
         <Quantity>
-          <button type="button" onClick={onDecrease} disabled={count === 0}>
+          <button
+            type="button"
+            onClick={onDecrease}
+            disabled={count === 0 || isLock}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -32,8 +36,13 @@ function BreadItem({ bread }) {
               />
             </svg>
           </button>
-          <input type="number" value={count} onChange={onChange} />
-          <button type="button" onClick={onIncrease}>
+          <input
+            type="number"
+            value={count}
+            onChange={onChange}
+            disabled={isLock}
+          />
+          <button type="button" onClick={onIncrease} disabled={isLock}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

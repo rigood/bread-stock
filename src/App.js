@@ -13,6 +13,8 @@ function App() {
   const day =
     "(" + dateNow.toLocaleDateString("ko-KR", { weekday: "short" }) + ")";
 
+  const [isLock, setIsLock] = useState(false);
+
   return (
     <>
       <GlobalStyle />
@@ -44,11 +46,20 @@ function App() {
               <label htmlFor="read">목록순</label>
             </div>
           </Sort>
+          <Mode>
+            <input
+              role="switch"
+              type="checkbox"
+              checked={isLock}
+              onChange={() => setIsLock((prev) => !prev)}
+            />
+            <span>{isLock ? "잠금" : "보기"}</span>
+          </Mode>
         </Header>
 
         <Main>
           {sortedBread.map((bread) => {
-            return <BreadItem bread={bread} />;
+            return <BreadItem bread={bread} isLock={isLock} />;
           })}
         </Main>
       </Layout>
@@ -62,11 +73,55 @@ const Layout = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 30px 10px;
+  position: sticky;
+  top: 0;
+  background-color: gold;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-  background-color: gold;
+`;
+
+const Mode = styled.label`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    appearance: none;
+    position: relative;
+    width: 60px;
+    height: 30px;
+    border: 1px solid tomato;
+    background-color: tomato;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    transform: scale(0.75);
+    transition: left 250ms linear;
+  }
+
+  input[type="checkbox"]:checked::before {
+    left: 30px;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: gray;
+    border-color: gray;
+  }
 `;
 
 const Dates = styled.div`
