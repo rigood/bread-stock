@@ -59,7 +59,6 @@ function App() {
 const Layout = styled.div`
   max-width: 500px;
   margin: 0 auto;
-  padding: 0 20px;
 `;
 
 const Header = styled.header`
@@ -83,6 +82,8 @@ const Sort = styled.div`
   column-gap: 20px;
 `;
 
-const Main = styled.main``;
+const Main = styled.main`
+  padding: 0 20px;
+`;
 
 export default App;
