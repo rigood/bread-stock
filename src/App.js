@@ -8,7 +8,8 @@ function App() {
   const [order, setOrder] = useState("write");
   const [isLock, setIsLock] = useState(false);
 
-  const initialBreadList = localStorage.getItem("bread") || BREAD_LIST;
+  const initialBreadList =
+    JSON.parse(localStorage.getItem("bread")) || BREAD_LIST;
   const [breadList, setBreadList] = useState(initialBreadList);
 
   useEffect(() => {

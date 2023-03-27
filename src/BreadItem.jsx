@@ -7,7 +7,7 @@ function BreadItem({
   breadList,
   setBreadList,
 }) {
-  const [count, setCount] = useState(null);
+  const [count, setCount] = useState(quantity);
 
   const onChange = (e) => {
     setCount(Number(e.target.value));
