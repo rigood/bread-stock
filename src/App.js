@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./GloablStyle";
 import { BREAD_LIST } from "./breadList";
@@ -8,14 +8,14 @@ function App() {
   const [order, setOrder] = useState("write");
   const [isLock, setIsLock] = useState(false);
 
-  let breadList;
-  const savedBreadList = localStorage.getItem("bread");
+  const initialBreadList = localStorage.getItem("bread") || BREAD_LIST;
+  const [breadList, setBreadList] = useState(initialBreadList);
 
-  if (savedBreadList === null) {
-    breadList = BREAD_LIST.sort((a, b) => a[order] - b[order]);
-  } else {
-    breadList = JSON.parse(savedBreadList).sort((a, b) => a[order] - b[order]);
-  }
+  useEffect(() => {
+    localStorage.setItem("bread", JSON.stringify(breadList));
+  }, [breadList]);
+
+  const sortedBreadList = breadList.sort((a, b) => a[order] - b[order]);
 
   const dateNow = new Date();
   const date = dateNow.toLocaleDateString("en-US").slice(0, -5);
@@ -65,13 +65,14 @@ function App() {
         </Header>
 
         <Main>
-          {breadList.map((bread) => {
+          {sortedBreadList.map((bread) => {
             return (
               <BreadItem
                 key={bread.name}
                 bread={bread}
                 isLock={isLock}
                 breadList={breadList}
+                setBreadList={setBreadList}
               />
             );
           })}

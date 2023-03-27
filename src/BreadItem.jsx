@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-function BreadItem({ bread: { name, quantity }, isLock, breadList }) {
-  const [count, setCount] = useState(quantity);
+function BreadItem({
+  bread: { name, quantity },
+  isLock,
+  breadList,
+  setBreadList,
+}) {
+  const [count, setCount] = useState(null);
 
   const onChange = (e) => {
     setCount(Number(e.target.value));
@@ -21,7 +26,7 @@ function BreadItem({ bread: { name, quantity }, isLock, breadList }) {
       ...bread,
       quantity: bread.name === name ? count : bread.quantity,
     }));
-    localStorage.setItem("bread", JSON.stringify(editedBreadList));
+    setBreadList(editedBreadList);
   }, [count]);
 
   return (
