@@ -60,6 +60,7 @@ function BreadItem({
             value={count}
             onChange={onChange}
             className={isLock && "red"}
+            disabled={isLock}
           />
           {!isLock && (
             <button type="button" onClick={onIncrease} disabled={isLock}>
