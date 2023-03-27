@@ -1,16 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-function BreadItem({ bread, isLock }) {
-  const [count, setCount] = useState(0);
+function BreadItem({ bread: { name, quantity }, isLock, breadList }) {
+  const [count, setCount] = useState(quantity);
 
-  const onChange = (e) => setCount(Number(e.target.value));
-  const onIncrease = () => setCount((prev) => prev + 1);
-  const onDecrease = () => setCount((prev) => prev - 1);
+  const onChange = (e) => {
+    setCount(Number(e.target.value));
+  };
+
+  const onIncrease = () => {
+    setCount((prev) => prev + 1);
+  };
+
+  const onDecrease = () => {
+    setCount((prev) => prev - 1);
+  };
+
+  useEffect(() => {
+    const editedBreadList = breadList.map((bread) => ({
+      ...bread,
+      quantity: bread.name === name ? count : bread.quantity,
+    }));
+    localStorage.setItem("bread", JSON.stringify(editedBreadList));
+  }, [count]);
 
   return (
     <Wrapper>
-      <Name>{bread.name}</Name>
+      <Name>{name}</Name>
       <Info>
         <MFD></MFD>
         <Quantity>

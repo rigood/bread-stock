@@ -1,19 +1,26 @@
 import { useState } from "react";
-import GlobalStyle from "./GloablStyle";
 import styled from "styled-components";
-import BreadItem from "./BreadItem";
+import GlobalStyle from "./GloablStyle";
 import { BREAD_LIST } from "./breadList";
+import BreadItem from "./BreadItem";
 
 function App() {
   const [order, setOrder] = useState("write");
-  const sortedBread = BREAD_LIST.sort((a, b) => a[order] - b[order]);
+  const [isLock, setIsLock] = useState(false);
+
+  let breadList;
+  const savedBreadList = localStorage.getItem("bread");
+
+  if (savedBreadList === null) {
+    breadList = BREAD_LIST.sort((a, b) => a[order] - b[order]);
+  } else {
+    breadList = JSON.parse(savedBreadList).sort((a, b) => a[order] - b[order]);
+  }
 
   const dateNow = new Date();
   const date = dateNow.toLocaleDateString("en-US").slice(0, -5);
   const day =
     "(" + dateNow.toLocaleDateString("ko-KR", { weekday: "short" }) + ")";
-
-  const [isLock, setIsLock] = useState(false);
 
   return (
     <>
@@ -58,8 +65,15 @@ function App() {
         </Header>
 
         <Main>
-          {sortedBread.map((bread) => {
-            return <BreadItem bread={bread} isLock={isLock} />;
+          {breadList.map((bread) => {
+            return (
+              <BreadItem
+                key={bread.name}
+                bread={bread}
+                isLock={isLock}
+                breadList={breadList}
+              />
+            );
           })}
         </Main>
       </Layout>
