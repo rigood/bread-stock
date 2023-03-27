@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/bread-stock/static/js/main.10300957.js",
+    "main.js": "/bread-stock/static/js/main.fa3cf987.js",
     "index.html": "/bread-stock/index.html",
-    "main.10300957.js.map": "/bread-stock/static/js/main.10300957.js.map"
+    "main.fa3cf987.js.map": "/bread-stock/static/js/main.fa3cf987.js.map"
   },
   "entrypoints": [
-    "static/js/main.10300957.js"
+    "static/js/main.fa3cf987.js"
   ]
 }
