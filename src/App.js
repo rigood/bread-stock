@@ -34,10 +34,12 @@ function App() {
   }, [breadList]);
 
   const onReset = () => {
-    localStorage.removeItem("bread");
-    localStorage.removeItem("breadOrder");
-    localStorage.removeItem("breadIsLock");
-    window.location.reload();
+    if (window.confirm("수량을 초기화 하시겠습니까?")) {
+      localStorage.removeItem("bread");
+      localStorage.removeItem("breadOrder");
+      localStorage.removeItem("breadIsLock");
+      window.location.reload();
+    }
   };
 
   return (
@@ -78,7 +80,7 @@ function App() {
             />
             <span>{isLock ? "잠금" : "입력"}</span>
           </Mode>
-          <Reset onClick={onReset}>Reset</Reset>
+          <Reset onClick={onReset}>초기화</Reset>
         </Header>
 
         <Main>
