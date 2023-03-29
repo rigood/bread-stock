@@ -3,6 +3,7 @@ import styled from "styled-components";
 import GlobalStyle from "./GloablStyle";
 import { BREAD_LIST } from "./breadList";
 import BreadItem from "./BreadItem";
+import Clock from "./Clock";
 
 function App() {
   const [order, setOrder] = useState("write");
@@ -24,21 +25,13 @@ function App() {
     window.location.reload();
   };
 
-  const dateNow = new Date();
-  const date = dateNow.toLocaleDateString("en-US").slice(0, -5);
-  const day =
-    "(" + dateNow.toLocaleDateString("ko-KR", { weekday: "short" }) + ")";
-
   return (
     <>
       <GlobalStyle />
 
       <Layout>
         <Header>
-          <Dates>
-            <span>{date}</span>
-            <span>{day}</span>
-          </Dates>
+          <Clock />
           <Sort>
             <div>
               <input
@@ -144,14 +137,6 @@ const Mode = styled.label`
   input[type="checkbox"]:checked {
     background-color: gray;
     border-color: gray;
-  }
-`;
-
-const Dates = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  span:first-child {
-    margin-right: 10px;
   }
 `;
 
