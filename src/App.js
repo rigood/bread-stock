@@ -10,6 +10,7 @@ function App() {
 
   const initialBreadList =
     JSON.parse(localStorage.getItem("bread")) || BREAD_LIST;
+
   const [breadList, setBreadList] = useState(initialBreadList);
 
   useEffect(() => {
@@ -17,6 +18,11 @@ function App() {
   }, [breadList]);
 
   const sortedBreadList = breadList.sort((a, b) => a[order] - b[order]);
+
+  const onReset = () => {
+    localStorage.removeItem("bread");
+    window.location.reload();
+  };
 
   const dateNow = new Date();
   const date = dateNow.toLocaleDateString("en-US").slice(0, -5);
@@ -63,6 +69,7 @@ function App() {
             />
             <span>{isLock ? "잠금" : "보기"}</span>
           </Mode>
+          <Reset onClick={onReset}>Reset</Reset>
         </Header>
 
         <Main>
@@ -100,7 +107,7 @@ const Header = styled.header`
 
 const Mode = styled.label`
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   right: 20px;
   display: inline-flex;
   align-items: center;
@@ -151,6 +158,12 @@ const Dates = styled.div`
 const Sort = styled.div`
   display: flex;
   column-gap: 20px;
+`;
+
+const Reset = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
 `;
 
 const Main = styled.main`
