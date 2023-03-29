@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 function BreadItem({
@@ -7,10 +7,25 @@ function BreadItem({
   breadList,
   setBreadList,
 }) {
+  const inputRef = useRef();
+
   const [count, setCount] = useState(quantity);
 
   const onChange = (e) => {
     setCount(Number(e.target.value));
+  };
+
+  const onFocus = () => {
+    if (count === 0) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const onBlur = () => {
+    if (inputRef.current.value === "") {
+      inputRef.current.value = 0;
+      setCount(0);
+    }
   };
 
   const onIncrease = () => {
@@ -62,7 +77,11 @@ function BreadItem({
           <input
             type="number"
             value={count}
+            min={0}
+            ref={inputRef}
             onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
             className={isLock ? "red" : undefined}
             disabled={isLock}
           />
