@@ -6,22 +6,37 @@ import BreadItem from "./BreadItem";
 import Clock from "./Clock";
 
 function App() {
-  const [order, setOrder] = useState("write");
-  const [isLock, setIsLock] = useState(false);
-
+  const initialOrder =
+    JSON.parse(localStorage.getItem("breadOrder")) || "fridge";
+  const initialIsLock =
+    JSON.parse(localStorage.getItem("breadIsLock")) || false;
   const initialBreadList =
     JSON.parse(localStorage.getItem("bread")) || BREAD_LIST;
 
+  const [order, setOrder] = useState(initialOrder);
+  const [isLock, setIsLock] = useState(initialIsLock);
   const [breadList, setBreadList] = useState(initialBreadList);
+
+  const sortedBreadList = breadList.sort((a, b) => a[order] - b[order]);
+
+  const onOrderChange = (order) => {
+    setOrder(order);
+    localStorage.setItem("breadOrder", JSON.stringify(order));
+  };
+
+  const onIsLockChange = () => {
+    setIsLock((prev) => !prev);
+    localStorage.setItem("breadIsLock", JSON.stringify(!isLock));
+  };
 
   useEffect(() => {
     localStorage.setItem("bread", JSON.stringify(breadList));
   }, [breadList]);
 
-  const sortedBreadList = breadList.sort((a, b) => a[order] - b[order]);
-
   const onReset = () => {
     localStorage.removeItem("bread");
+    localStorage.removeItem("breadOrder");
+    localStorage.removeItem("breadIsLock");
     window.location.reload();
   };
 
@@ -37,20 +52,21 @@ function App() {
               <input
                 type="radio"
                 name="sort"
-                id="write"
-                defaultChecked
-                onClick={() => setOrder("write")}
+                id="fridge"
+                defaultChecked={order === "fridge"}
+                onClick={() => onOrderChange("fridge")}
               />
-              <label htmlFor="write">기록순</label>
+              <label htmlFor="fridge">냉장고+진열대</label>
             </div>
             <div>
               <input
                 type="radio"
                 name="sort"
-                id="read"
-                onClick={() => setOrder("read")}
+                id="checklist"
+                defaultChecked={order === "checklist"}
+                onClick={() => onOrderChange("checklist")}
               />
-              <label htmlFor="read">목록순</label>
+              <label htmlFor="checklist">재고대장</label>
             </div>
           </Sort>
           <Mode>
@@ -58,9 +74,9 @@ function App() {
               role="switch"
               type="checkbox"
               checked={isLock}
-              onChange={() => setIsLock((prev) => !prev)}
+              onChange={onIsLockChange}
             />
-            <span>{isLock ? "잠금" : "보기"}</span>
+            <span>{isLock ? "잠금" : "입력"}</span>
           </Mode>
           <Reset onClick={onReset}>Reset</Reset>
         </Header>
