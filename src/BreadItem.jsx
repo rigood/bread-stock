@@ -59,7 +59,7 @@ function BreadItem({
             type="number"
             value={count}
             onChange={onChange}
-            className={isLock && "red"}
+            className={isLock ? "red" : undefined}
             disabled={isLock}
           />
           {!isLock && (
