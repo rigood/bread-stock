@@ -15,7 +15,7 @@ function BreadItem({
   isHideZero,
   breadList,
   setBreadList,
-  page,
+  tab,
 }) {
   const inputRef = useRef();
   const [label, setLabel] = useState(initialLabel);
@@ -122,7 +122,7 @@ function BreadItem({
   const isLastItem = getIsLastItem();
 
   function getIsLastItem() {
-    if (page === "fridge") return false;
+    if (tab === "fridge") return false;
 
     let group;
     if (isHideZero) {

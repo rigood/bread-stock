@@ -33,12 +33,8 @@ function Clock() {
 export default Clock;
 
 const Wrapper = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-
-  @media screen and (max-width: 320px) {
-    strong {
-      display: none;
-    }
-  }
+  text-align: center;
+  line-height: 1.3;
 `;

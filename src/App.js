@@ -4,31 +4,28 @@ import GlobalStyle from "./GloablStyle";
 import { BREAD_LIST } from "./data";
 import BreadItem from "./BreadItem";
 import Clock from "./Clock";
-import Sort from "./Sort";
-import Mode from "./Mode";
 
 function App() {
   // state 초기값 설정
-  const initialPage =
-    JSON.parse(localStorage.getItem("bread_page")) || "fridge";
+  const initialTab = JSON.parse(localStorage.getItem("bread_tab")) || "fridge";
   const initialIsLock =
     JSON.parse(localStorage.getItem("bread_isLock")) || false;
   const initialBreadList =
     JSON.parse(localStorage.getItem("bread_list")) || BREAD_LIST;
 
   // state 관리
-  const [page, setPage] = useState(initialPage);
+  const [tab, setTab] = useState(initialTab);
   const [isLock, setIsLock] = useState(initialIsLock);
   const [isHideZero, setIsHideZero] = useState(false);
   const [breadList, setBreadList] = useState(initialBreadList);
 
   // 빵 리스트 정렬
-  const sortedBreadList = breadList.sort((a, b) => a[page] - b[page]);
+  const sortedBreadList = breadList.sort((a, b) => a[tab] - b[tab]);
 
   // state 변경 시 로컬스토리지에 반영
-  const onPageChange = (page) => {
-    setPage(page);
-    localStorage.setItem("bread_page", JSON.stringify(page));
+  const onTabChange = (tab) => {
+    setTab(tab);
+    localStorage.setItem("bread_tab", JSON.stringify(tab));
   };
 
   const onIsLockChange = () => {
@@ -49,7 +46,7 @@ function App() {
   const onReset = () => {
     if (window.confirm("초기화 하시겠습니까?")) {
       localStorage.removeItem("bread_list");
-      localStorage.removeItem("bread_page");
+      localStorage.removeItem("bread_tab");
       localStorage.removeItem("bread_isLock");
       window.location.reload();
     }
@@ -61,19 +58,46 @@ function App() {
 
       <Layout>
         <Header>
-          <div>
+          <Top>
             <Clock />
-            <Mode isLock={isLock} onIsLockChange={onIsLockChange} />
-          </div>
-          <div>
-            <Sort page={page} onPageChange={onPageChange} />
-            <Buttons>
-              <HideZero onClick={onHideZero}>
-                수량 0 {isHideZero ? "보이기" : "숨기기"}
-              </HideZero>
-              <Reset onClick={onReset}>초기화</Reset>
-            </Buttons>
-          </div>
+            <Control>
+              <i
+                className={
+                  isHideZero
+                    ? "fa-solid fa-eye-slash active"
+                    : "fa-solid fa-eye"
+                }
+                onClick={onHideZero}
+                title="수량 0인 품목 숨기기/보이기 설정"
+              />
+              <i
+                className={
+                  isLock ? "fa-solid fa-lock active" : "fa-solid fa-lock-open"
+                }
+                onClick={onIsLockChange}
+                title="잠금/입력 모드 설정"
+              />
+              <i
+                className="fa-solid fa-rotate-left"
+                onClick={onReset}
+                title="초기화"
+              />
+            </Control>
+          </Top>
+          <Bottom>
+            <Tab
+              active={tab === "fridge"}
+              onClick={() => onTabChange("fridge")}
+            >
+              🎂 수량 확인용
+            </Tab>
+            <Tab
+              active={tab === "checklist"}
+              onClick={() => onTabChange("checklist")}
+            >
+              📑 수량 기록용
+            </Tab>
+          </Bottom>
         </Header>
 
         <Main>
@@ -86,7 +110,7 @@ function App() {
                 isHideZero={isHideZero}
                 breadList={breadList}
                 setBreadList={setBreadList}
-                page={page}
+                tab={tab}
               />
             );
           })}
@@ -110,37 +134,43 @@ const Header = styled.header`
   top: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
-  padding: 20px;
-  background-color: gold;
-
-  & > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  @media screen and (max-width: 500px) {
-    & > div:last-child {
-      flex-direction: column;
-      row-gap: 10px;
-    }
-  }
 `;
 
-const Buttons = styled.div`
+const Top = styled.div`
   display: flex;
-  column-gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 30px;
+  padding: 20px;
+  background-color: #ffed46;
 `;
 
-const HideZero = styled.button`
-  font-family: inherit;
-  font-size: inherit;
+const Control = styled.div`
+  display: flex;
+  column-gap: 20px;
+  i {
+    padding: 4px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .active {
+    color: tomato;
+  }
 `;
 
-const Reset = styled.button`
-  font-family: inherit;
-  font-size: inherit;
+const Bottom = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0px 2px 8px -4px rgba(99, 99, 99, 0.2);
+`;
+
+const Tab = styled.div`
+  padding: 15px;
+  background-color: ${(props) => (props.active ? "lightyellow" : "white")};
+  font-weight: ${(props) => props.active && "bold"};
+  color: ${(props) => !props.active && "gray"};
+  text-align: center;
+  cursor: pointer;
 `;
 
 const Main = styled.main``;
