@@ -16,6 +16,7 @@ function Clock() {
 
   return (
     <Wrapper>
+      <strong>🍞 </strong>
       <span>{now.toLocaleDateString("en-US").slice(0, -5)}</span>
 
       <span>
@@ -34,4 +35,10 @@ export default Clock;
 const Wrapper = styled.div`
   font-size: 24px;
   font-weight: bold;
+
+  @media screen and (max-width: 320px) {
+    strong {
+      display: none;
+    }
+  }
 `;

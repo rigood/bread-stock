@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# 🍞 빵 얼마나 남았니
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**현재 알바중인 빵집에서 일일 재고 현황을 쉽게 파악·기록하기 위해 만든 앱입니다.**
 
-## Available Scripts
+[빵 얼마나 남았니 바로가기](https://rigood.github.io/bread-stock)
 
-In the project directory, you can run:
+<br>
 
-### `npm start`
+## 주요 기능
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<img src="./public/assets/bread.png">
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- (+), (-) 버튼과 숫자 키보드를 통해 수량 입력
+- 빵 이름 클릭 시, 해당 빵 재고 추가 가능
 
-### `npm test`
+<br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<img src="./public/assets/label.png">
 
-### `npm run build`
+- 빵 포장 방법 선택 가능 (toggle)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<img src="./public/assets/menu.png">
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 정렬 순서 선택
+- 입력 / 잠금 모드
+- 수량 0인 품목 숨기기, 초기화
 
-### `npm run eject`
+<br>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 업데이트 기록
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| **버전** |   **날짜**   |
+| :------: | :----------: |
+|   1.0    | 2023. 3. 29. |
+|   1.1    | 2023. 4. 29. |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### ver 1.1
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    - 수량 0인 품목 숨기기 기능 추가
+    - 재고 추가 2회로 제한

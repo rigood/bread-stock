@@ -1,43 +1,56 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./GloablStyle";
-import { BREAD_LIST } from "./breadList";
+import { BREAD_LIST } from "./data";
 import BreadItem from "./BreadItem";
 import Clock from "./Clock";
+import Sort from "./Sort";
+import Mode from "./Mode";
 
 function App() {
-  const initialOrder =
-    JSON.parse(localStorage.getItem("breadOrder")) || "fridge";
+  // state 초기값 설정
+  const initialPage =
+    JSON.parse(localStorage.getItem("bread_page")) || "fridge";
   const initialIsLock =
-    JSON.parse(localStorage.getItem("breadIsLock")) || false;
+    JSON.parse(localStorage.getItem("bread_isLock")) || false;
   const initialBreadList =
-    JSON.parse(localStorage.getItem("bread")) || BREAD_LIST;
+    JSON.parse(localStorage.getItem("bread_list")) || BREAD_LIST;
 
-  const [order, setOrder] = useState(initialOrder);
+  // state 관리
+  const [page, setPage] = useState(initialPage);
   const [isLock, setIsLock] = useState(initialIsLock);
+  const [isHideZero, setIsHideZero] = useState(false);
   const [breadList, setBreadList] = useState(initialBreadList);
 
-  const sortedBreadList = breadList.sort((a, b) => a[order] - b[order]);
+  // 빵 리스트 정렬
+  const sortedBreadList = breadList.sort((a, b) => a[page] - b[page]);
 
-  const onOrderChange = (order) => {
-    setOrder(order);
-    localStorage.setItem("breadOrder", JSON.stringify(order));
+  // state 변경 시 로컬스토리지에 반영
+  const onPageChange = (page) => {
+    setPage(page);
+    localStorage.setItem("bread_page", JSON.stringify(page));
   };
 
   const onIsLockChange = () => {
     setIsLock((prev) => !prev);
-    localStorage.setItem("breadIsLock", JSON.stringify(!isLock));
+    localStorage.setItem("bread_isLock", JSON.stringify(!isLock));
   };
 
   useEffect(() => {
-    localStorage.setItem("bread", JSON.stringify(breadList));
+    localStorage.setItem("bread_list", JSON.stringify(breadList));
   }, [breadList]);
 
+  // 수량 0인 품목 숨기기
+  const onHideZero = () => {
+    setIsHideZero((prev) => !prev);
+  };
+
+  // 초기화
   const onReset = () => {
-    if (window.confirm("수량을 초기화 하시겠습니까?")) {
-      localStorage.removeItem("bread");
-      localStorage.removeItem("breadOrder");
-      localStorage.removeItem("breadIsLock");
+    if (window.confirm("초기화 하시겠습니까?")) {
+      localStorage.removeItem("bread_list");
+      localStorage.removeItem("bread_page");
+      localStorage.removeItem("bread_isLock");
       window.location.reload();
     }
   };
@@ -48,39 +61,19 @@ function App() {
 
       <Layout>
         <Header>
-          <Clock />
-          <Sort>
-            <div>
-              <input
-                type="radio"
-                name="sort"
-                id="fridge"
-                defaultChecked={order === "fridge"}
-                onClick={() => onOrderChange("fridge")}
-              />
-              <label htmlFor="fridge">냉장고+진열대</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                name="sort"
-                id="checklist"
-                defaultChecked={order === "checklist"}
-                onClick={() => onOrderChange("checklist")}
-              />
-              <label htmlFor="checklist">재고대장</label>
-            </div>
-          </Sort>
-          <Mode>
-            <input
-              role="switch"
-              type="checkbox"
-              checked={isLock}
-              onChange={onIsLockChange}
-            />
-            <span>{isLock ? "잠금" : "입력"}</span>
-          </Mode>
-          <Reset onClick={onReset}>초기화</Reset>
+          <div>
+            <Clock />
+            <Mode isLock={isLock} onIsLockChange={onIsLockChange} />
+          </div>
+          <div>
+            <Sort page={page} onPageChange={onPageChange} />
+            <Buttons>
+              <HideZero onClick={onHideZero}>
+                수량 0 {isHideZero ? "보이기" : "숨기기"}
+              </HideZero>
+              <Reset onClick={onReset}>초기화</Reset>
+            </Buttons>
+          </div>
         </Header>
 
         <Main>
@@ -90,8 +83,10 @@ function App() {
                 key={bread.name}
                 bread={bread}
                 isLock={isLock}
+                isHideZero={isHideZero}
                 breadList={breadList}
                 setBreadList={setBreadList}
+                page={page}
               />
             );
           })}
@@ -101,76 +96,51 @@ function App() {
   );
 }
 
+export default App;
+
 const Layout = styled.div`
   max-width: 500px;
+  min-height: 100vh;
   margin: 0 auto;
+  background-color: white;
 `;
 
 const Header = styled.header`
   position: sticky;
   top: 0;
-  background-color: gold;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-`;
+  padding: 20px;
+  background-color: gold;
 
-const Mode = styled.label`
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-
-  input[type="checkbox"] {
-    appearance: none;
-    position: relative;
-    width: 60px;
-    height: 30px;
-    border: 1px solid tomato;
-    background-color: tomato;
-    border-radius: 30px;
-    cursor: pointer;
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  input[type="checkbox"]::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background-color: white;
-    transform: scale(0.75);
-    transition: left 250ms linear;
-  }
-
-  input[type="checkbox"]:checked::before {
-    left: 30px;
-  }
-
-  input[type="checkbox"]:checked {
-    background-color: gray;
-    border-color: gray;
+  @media screen and (max-width: 500px) {
+    & > div:last-child {
+      flex-direction: column;
+      row-gap: 10px;
+    }
   }
 `;
 
-const Sort = styled.div`
+const Buttons = styled.div`
   display: flex;
-  column-gap: 20px;
+  column-gap: 10px;
+`;
+
+const HideZero = styled.button`
+  font-family: inherit;
+  font-size: inherit;
 `;
 
 const Reset = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  font-family: inherit;
+  font-size: inherit;
 `;
 
-const Main = styled.main`
-  padding: 0 20px;
-`;
-
-export default App;
+const Main = styled.main``;
