@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/bread-stock/static/js/main.1bdf4dfb.js",
+    "main.js": "/bread-stock/static/js/main.43eadfeb.js",
     "static/media/Pretendard-Regular.woff": "/bread-stock/static/media/Pretendard-Regular.32d8ced04df3d294cb98.woff",
     "static/media/Pretendard-Regular.woff2": "/bread-stock/static/media/Pretendard-Regular.c2d6e5ccab1998598e2a.woff2",
     "index.html": "/bread-stock/index.html",
-    "main.1bdf4dfb.js.map": "/bread-stock/static/js/main.1bdf4dfb.js.map"
+    "main.43eadfeb.js.map": "/bread-stock/static/js/main.43eadfeb.js.map"
   },
   "entrypoints": [
-    "static/js/main.1bdf4dfb.js"
+    "static/js/main.43eadfeb.js"
   ]
 }
