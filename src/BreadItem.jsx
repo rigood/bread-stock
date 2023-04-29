@@ -182,9 +182,9 @@ const Wrapper = styled.div`
   grid-template-columns: 4rem 4.5fr 1.5fr 2fr;
   column-gap: 1rem;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   border-bottom: ${(props) =>
-    props.isLastItem ? "2px solid gold" : "1px dashed #ededed"};
+    props.isLastItem ? "1px solid gold" : "1px dashed #ededed"};
   display: ${(props) => props.isHideZero && props.count === 0 && "none"};
 `;
 
@@ -214,8 +214,8 @@ const Quantity = styled.div`
 `;
 
 const Button = styled.button`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.8rem;
+  height: 2.8rem;
   padding: 0;
   border: none;
   background-color: tomato;
@@ -224,7 +224,7 @@ const Button = styled.button`
   cursor: pointer;
 
   i {
-    font-size: 1.6rem;
+    font-size: 2rem;
     color: white;
   }
 
@@ -237,7 +237,7 @@ const Button = styled.button`
 const Input = styled.input`
   width: 6rem;
   border: none;
-  font-size: 2rem;
+  font-size: 2.2rem;
   text-align: center;
 
   &.red {

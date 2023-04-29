@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import GlobalStyle from "./GloablStyle";
+import GlobalStyle from "./GlobalStyle";
 import { BREAD_LIST } from "./data";
 import BreadItem from "./BreadItem";
 import Clock from "./Clock";
@@ -59,30 +59,35 @@ function App() {
       <Layout>
         <Header>
           <Top>
-            <Clock />
-            <Control>
-              <i
-                className={
-                  isHideZero
-                    ? "fa-solid fa-eye-slash active"
-                    : "fa-solid fa-eye"
-                }
-                onClick={onHideZero}
-                title="수량 0인 품목 숨기기/보이기 설정"
-              />
-              <i
-                className={
-                  isLock ? "fa-solid fa-lock active" : "fa-solid fa-lock-open"
-                }
-                onClick={onIsLockChange}
-                title="잠금/입력 모드 설정"
-              />
-              <i
-                className="fa-solid fa-rotate-left"
-                onClick={onReset}
-                title="초기화"
-              />
-            </Control>
+            <TopLeft>
+              <Title>🍞 빵 얼마나 남았니</Title>
+              <Clock />
+            </TopLeft>
+            <TopRight>
+              <Control>
+                <i
+                  className={
+                    isHideZero
+                      ? "fa-solid fa-eye-slash active"
+                      : "fa-solid fa-eye"
+                  }
+                  onClick={onHideZero}
+                  title="수량 0인 품목 숨기기/보이기 설정"
+                />
+                <i
+                  className={
+                    isLock ? "fa-solid fa-lock active" : "fa-solid fa-lock-open"
+                  }
+                  onClick={onIsLockChange}
+                  title="잠금/입력 모드 설정"
+                />
+                <i
+                  className="fa-solid fa-rotate-left"
+                  onClick={onReset}
+                  title="초기화"
+                />
+              </Control>
+            </TopRight>
           </Top>
           <Bottom>
             <Tab
@@ -143,6 +148,21 @@ const Top = styled.div`
   column-gap: 3rem;
   padding: 2rem;
   background-color: #ffed46;
+`;
+
+const TopLeft = styled.div``;
+
+const TopRight = styled.div``;
+
+const Title = styled.h1`
+  font-family: "ddangs";
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  word-break: keep-all;
+  margin-bottom: 0.5rem;
+  position: relative;
+  top: 0.5rem;
 `;
 
 const Control = styled.div`
