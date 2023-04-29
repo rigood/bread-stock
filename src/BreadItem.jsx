@@ -211,6 +211,8 @@ const Name = styled.div`
 `;
 
 const Label = styled.div`
+  font-size: 14px;
+  color: gray;
   text-align: center;
   cursor: pointer;
 `;
