@@ -179,39 +179,30 @@ export default BreadItem;
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 4.5fr 1.5fr 2fr;
-  column-gap: 20px;
+  grid-template-columns: 4rem 4.5fr 1.5fr 2fr;
+  column-gap: 1rem;
   align-items: center;
-  padding: 20px;
+  padding: 1rem 2rem;
   border-bottom: ${(props) =>
-    props.isLastItem ? "3px solid gold" : "1px solid lightgray"};
-
-  @media screen and (min-width: 501px) {
-    grid-template-columns: 40px 4.5fr 1.5fr 2fr;
-  }
-
+    props.isLastItem ? "2px solid gold" : "1px dashed #ededed"};
   display: ${(props) => props.isHideZero && props.count === 0 && "none"};
 `;
 
 const Img = styled.img`
-  display: none;
-  width: 40px;
-  height: 40px;
+  width: 3rem;
+  height: 3rem;
   object-fit: cover;
-
-  @media screen and (min-width: 501px) {
-    display: block;
-  }
 `;
 
 const Name = styled.div`
   span {
+    font-size: 1.6rem;
     cursor: pointer;
   }
 `;
 
 const Label = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   color: gray;
   text-align: center;
   cursor: pointer;
@@ -223,8 +214,8 @@ const Quantity = styled.div`
 `;
 
 const Button = styled.button`
-  width: 36px;
-  height: 36px;
+  width: 2.4rem;
+  height: 2.4rem;
   padding: 0;
   border: none;
   background-color: tomato;
@@ -233,7 +224,7 @@ const Button = styled.button`
   cursor: pointer;
 
   i {
-    font-size: 24px;
+    font-size: 1.6rem;
     color: white;
   }
 
@@ -244,9 +235,9 @@ const Button = styled.button`
 `;
 
 const Input = styled.input`
-  width: 60px;
+  width: 6rem;
   border: none;
-  font-size: 24px;
+  font-size: 2rem;
   text-align: center;
 
   &.red {

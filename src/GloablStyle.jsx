@@ -15,6 +15,16 @@ ${reset};
     box-sizing: border-box;
 }
 
+html{
+    font-size: 62.5%;
+}
+
+@media screen and (max-width: 500px) {
+        html{
+            font-size: 52.5%;        
+        }
+    }
+
 body{
     font-family: 'pretendard';
     background-color: #F8F0E5;

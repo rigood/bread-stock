@@ -140,17 +140,17 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  column-gap: 30px;
-  padding: 20px;
+  column-gap: 3rem;
+  padding: 2rem;
   background-color: #ffed46;
 `;
 
 const Control = styled.div`
   display: flex;
-  column-gap: 20px;
+  column-gap: 2rem;
   i {
-    padding: 4px;
-    font-size: 18px;
+    padding: 0.4rem;
+    font-size: 1.8rem;
     cursor: pointer;
   }
   .active {
@@ -165,8 +165,9 @@ const Bottom = styled.div`
 `;
 
 const Tab = styled.div`
-  padding: 15px;
+  padding: 1.5rem;
   background-color: ${(props) => (props.active ? "lightyellow" : "white")};
+  font-size: 1.6rem;
   font-weight: ${(props) => props.active && "bold"};
   color: ${(props) => !props.active && "gray"};
   text-align: center;
