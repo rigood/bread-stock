@@ -19,7 +19,7 @@ function App() {
   const [isHideZero, setIsHideZero] = useState(false);
   const [breadList, setBreadList] = useState(initialBreadList);
 
-  // 빵 리스트 정렬
+  // 빵 목록 정렬
   const sortedBreadList = breadList.sort((a, b) => a[tab] - b[tab]);
 
   // state 변경 시 로컬스토리지에 반영
