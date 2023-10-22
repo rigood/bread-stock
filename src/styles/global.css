@@ -1,0 +1,14 @@
+:root {
+  --breakpoint: 500px;
+  --primary-color: tomato;
+  --sub-text-color: gray;
+  --bg-color: #f8f0e5;
+  --header-bg-color: #ffed46;
+  --active-icon-btn-color: tomato;
+  --active-tab-btn-color: lightyellow;
+  --tab-btn-color: white;
+  --clock-color: tomato;
+  --divider-color: #ededed;
+  --last-item-divider-color: gold;
+  --box-shadow: 0px 2px 8px -4px rgba(99, 99, 99, 0.2);
+}

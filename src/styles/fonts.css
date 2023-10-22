@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "pretendard";
+  font-weight: 400;
+  src: url("../assets/fonts/Pretendard-Regular.woff2") format("woff2"),
+    url("../assets/fonts/Pretendard-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ddangs";
+  font-weight: 400;
+  src: url("../assets/fonts/ddangs2.woff2") format("woff2"),
+    url("../assets/fonts/ddangs.woff") format("woff");
+}

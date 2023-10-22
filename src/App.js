@@ -1,197 +1,152 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
-import GlobalStyle from "./GlobalStyle";
-import { BREAD_LIST } from "./data";
-import BreadItem from "./BreadItem";
-import Clock from "./Clock";
+import getItemFromLocalStorage from "./utils/getItemFromLocalStorage";
+import setItemInLocalStorage from "./utils/setItemInLocalStorage";
+import { BREAD_LIST } from "./data/bread-list";
+import {
+  CHECKLIST_BREAD_ORDER,
+  FRIDGE_BREAD_ORDER,
+} from "./data/bread-order-by-tab";
+import {
+  KEY_BREAD_TAB,
+  KEY_BREAD_ISLOCKED,
+  KEY_BREAD_ISHIDINGZEROQUANTITY,
+  KEY_BREAD_LIST,
+  TAB_FRIDGE,
+} from "./constants";
+import Header from "./components/Header";
+import BreadItem from "./components/BreadItem";
+import getItemFromLocalStroage from "./utils/getItemFromLocalStorage";
 
-function App() {
+const App = () => {
   // state 초기값 설정
-  const initialTab = JSON.parse(localStorage.getItem("bread_tab")) || "fridge";
-  const initialIsLock =
-    JSON.parse(localStorage.getItem("bread_isLock")) || false;
+  const initialTab = getItemFromLocalStorage(KEY_BREAD_TAB) || TAB_FRIDGE;
+  const initialIsLocked = getItemFromLocalStorage(KEY_BREAD_ISLOCKED) || false;
+  const initialIsHidingZeroQuantity =
+    getItemFromLocalStroage(KEY_BREAD_ISHIDINGZEROQUANTITY) || false;
   const initialBreadList =
-    JSON.parse(localStorage.getItem("bread_list")) || BREAD_LIST;
+    getItemFromLocalStorage(KEY_BREAD_LIST) || BREAD_LIST;
 
   // state 관리
   const [tab, setTab] = useState(initialTab);
-  const [isLock, setIsLock] = useState(initialIsLock);
-  const [isHideZero, setIsHideZero] = useState(false);
+  const [isLocked, setIsLocked] = useState(initialIsLocked);
+  const [isHidingZeroQuantity, setIsHidingZeroQuantity] = useState(
+    initialIsHidingZeroQuantity
+  );
   const [breadList, setBreadList] = useState(initialBreadList);
 
-  // 빵 목록 정렬
-  const sortedBreadList = breadList.sort((a, b) => a[tab] - b[tab]);
+  // tab에 따라 빵 목록 정렬
+  const sortedBreadList =
+    // '수량 조사용' 탭 -> 빵 이름(사용자 지정 목록순)에 따라 정렬
+    tab === TAB_FRIDGE
+      ? breadList.sort(
+          (a, b) =>
+            FRIDGE_BREAD_ORDER.findIndex((breadName) => breadName === a.name) -
+            FRIDGE_BREAD_ORDER.findIndex((breadName) => breadName === b.name)
+        )
+      : // '수량 기록용' 탭 -> 빵 넘버(사용자 지정 목록순), 재고 횟수(오름차순), 빵 이름(사용자 지정 목록순)에 따라 정렬
+        breadList.sort(
+          (a, b) =>
+            CHECKLIST_BREAD_ORDER.findIndex(
+              (breadNo) => breadNo === a.breadNo
+            ) -
+              CHECKLIST_BREAD_ORDER.findIndex(
+                (breadNo) => breadNo === b.breadNo
+              ) ||
+            a.stockCount - b.stockCount ||
+            FRIDGE_BREAD_ORDER.findIndex((breadName) => breadName === a.name) -
+              FRIDGE_BREAD_ORDER.findIndex((breadName) => breadName === b.name)
+        );
 
   // state 변경 시 로컬스토리지에 반영
-  const onTabChange = (tab) => {
+  const changeTab = (tab) => {
     setTab(tab);
-    localStorage.setItem("bread_tab", JSON.stringify(tab));
+    setItemInLocalStorage(KEY_BREAD_TAB, tab);
   };
 
-  const onIsLockChange = () => {
-    setIsLock((prev) => !prev);
-    localStorage.setItem("bread_isLock", JSON.stringify(!isLock));
+  const toggleIsLocked = () => {
+    setIsLocked((prev) => !prev);
+    setItemInLocalStorage(KEY_BREAD_ISLOCKED, !isLocked);
+  };
+
+  const toggleIsHidingZeroQuantity = () => {
+    setIsHidingZeroQuantity((prev) => !prev);
   };
 
   useEffect(() => {
-    localStorage.setItem("bread_list", JSON.stringify(breadList));
+    setItemInLocalStorage(KEY_BREAD_LIST, breadList);
   }, [breadList]);
 
-  // 수량 0인 품목 숨기기
-  const onHideZero = () => {
-    setIsHideZero((prev) => !prev);
-  };
-
-  // 초기화
-  const onReset = () => {
+  // 전체 초기화
+  const reset = () => {
     if (window.confirm("초기화 하시겠습니까?")) {
-      localStorage.removeItem("bread_list");
-      localStorage.removeItem("bread_tab");
-      localStorage.removeItem("bread_isLock");
+      localStorage.removeItem(KEY_BREAD_LIST);
+      localStorage.removeItem(KEY_BREAD_TAB);
+      localStorage.removeItem(KEY_BREAD_ISLOCKED);
       window.location.reload();
     }
   };
 
-  return (
-    <>
-      <GlobalStyle />
+  // 구분선 표시를 위해 동일 빵 제품 중 가장 마지막에 위치하는 요소 찾기
+  const findLastItem = useCallback(
+    (breadNo, id) => {
+      if (tab === TAB_FRIDGE) return false;
 
-      <Layout>
-        <Header>
-          <Top>
-            <TopLeft>
-              <Title>🍞 빵 얼마나 남았니</Title>
-              <Clock />
-            </TopLeft>
-            <TopRight>
-              <Control>
-                <i
-                  className={
-                    isHideZero
-                      ? "fa-solid fa-eye-slash active"
-                      : "fa-solid fa-eye"
-                  }
-                  onClick={onHideZero}
-                  title="수량 0인 품목 숨기기/보이기 설정"
-                />
-                <i
-                  className={
-                    isLock ? "fa-solid fa-lock active" : "fa-solid fa-lock-open"
-                  }
-                  onClick={onIsLockChange}
-                  title="잠금/입력 모드 설정"
-                />
-                <i
-                  className="fa-solid fa-rotate-left"
-                  onClick={onReset}
-                  title="초기화"
-                />
-              </Control>
-            </TopRight>
-          </Top>
-          <Bottom>
-            <Tab
-              active={tab === "fridge"}
-              onClick={() => onTabChange("fridge")}
-            >
-              🎂 수량 확인용
-            </Tab>
-            <Tab
-              active={tab === "checklist"}
-              onClick={() => onTabChange("checklist")}
-            >
-              📑 수량 기록용
-            </Tab>
-          </Bottom>
-        </Header>
+      let group;
 
-        <Main>
-          {sortedBreadList.map((bread) => {
-            return (
-              <BreadItem
-                key={bread.name}
-                bread={bread}
-                isLock={isLock}
-                isHideZero={isHideZero}
-                breadList={breadList}
-                setBreadList={setBreadList}
-                tab={tab}
-              />
-            );
-          })}
-        </Main>
-      </Layout>
-    </>
+      if (isHidingZeroQuantity) {
+        group = breadList.filter(
+          (bread) => bread.breadNo === breadNo && bread.quantity !== 0
+        );
+      } else {
+        group = breadList.filter((bread) => bread.breadNo === breadNo);
+      }
+
+      const isLastItem =
+        group.findIndex((bread) => bread.id === id) === group.length - 1;
+
+      return isLastItem;
+    },
+    [breadList, tab, isHidingZeroQuantity]
   );
-}
+
+  return (
+    <Layout>
+      <Header
+        isHidingZeroQuantity={isHidingZeroQuantity}
+        isLocked={isLocked}
+        tab={tab}
+        toggleIsHidingZeroQuantity={toggleIsHidingZeroQuantity}
+        toggleIsLocked={toggleIsLocked}
+        changeTab={changeTab}
+        reset={reset}
+      />
+      <Main>
+        {sortedBreadList.map((bread) => {
+          return (
+            <BreadItem
+              key={bread.id}
+              bread={bread}
+              isLastItem={findLastItem(bread.breadNo, bread.id)}
+              isHidingZeroQuantity={isHidingZeroQuantity}
+              isLocked={isLocked}
+              setBreadList={setBreadList}
+            />
+          );
+        })}
+      </Main>
+    </Layout>
+  );
+};
 
 export default App;
 
 const Layout = styled.div`
-  max-width: 500px;
+  max-width: var(--breakpoint);
   min-height: 100vh;
   margin: 0 auto;
   background-color: white;
-`;
-
-const Header = styled.header`
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Top = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 3rem;
-  padding: 2rem;
-  background-color: #ffed46;
-`;
-
-const TopLeft = styled.div``;
-
-const TopRight = styled.div``;
-
-const Title = styled.h1`
-  font-family: "ddangs";
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  word-break: keep-all;
-  margin-bottom: 0.5rem;
-  position: relative;
-  top: 0.5rem;
-`;
-
-const Control = styled.div`
-  display: flex;
-  column-gap: 2rem;
-  i {
-    padding: 0.4rem;
-    font-size: 1.8rem;
-    cursor: pointer;
-  }
-  .active {
-    color: tomato;
-  }
-`;
-
-const Bottom = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  box-shadow: 0px 2px 8px -4px rgba(99, 99, 99, 0.2);
-`;
-
-const Tab = styled.div`
-  padding: 1.5rem;
-  background-color: ${(props) => (props.active ? "lightyellow" : "white")};
-  font-size: 1.6rem;
-  font-weight: ${(props) => props.active && "bold"};
-  color: ${(props) => !props.active && "gray"};
-  text-align: center;
-  cursor: pointer;
+  box-shadow: var(--box-shadow);
 `;
 
 const Main = styled.main``;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-function Clock() {
+const Clock = () => {
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -16,27 +16,25 @@ function Clock() {
 
   return (
     <Wrapper>
+      {/* 날짜 */}
       <span>{now.toLocaleDateString("en-US").slice(0, -5)}</span>
-
+      {/* 요일 */}
       <span>
         {" (" + now.toLocaleDateString("ko-KR", { weekday: "short" }) + ") "}
       </span>
-
+      {/* 시간 */}
       <span>
         {now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0")}
       </span>
     </Wrapper>
   );
-}
+};
 
 export default Clock;
 
 const Wrapper = styled.div`
   font-size: 1.6rem;
   font-weight: bold;
-  color: tomato;
+  color: var(--clock-color);
   text-align: center;
-  line-height: 1.3;
-  position: relative;
-  top: 0.3rem;
 `;
